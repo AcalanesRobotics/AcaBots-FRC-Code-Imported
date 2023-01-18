@@ -3,12 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+//import edu.wpi.first.wpilibj.Compressor;
+//import edu.wpi.first.wpilibj.DoubleSolenoid;
 //import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+//import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 //import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -16,10 +18,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
-  // Declare all vars here
+  // Declare all vars here 
   private Command m_autonomousCommand;
-  Compressor pcmCompressor = new Compressor(PneumaticsModuleType.CTREPCM);
-  DoubleSolenoid solenoid1 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,1,2);
+  //Compressor pcmCompressor = new Compressor(PneumaticsModuleType.CTREPCM);
+  //DoubleSolenoid solenoid1 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,1,2);
   //private final Joystick mainStick = new Joystick(0);
   private final XboxController secondStick = new XboxController(0);
   private RobotContainer m_robotContainer;
@@ -37,15 +39,18 @@ public class Robot extends TimedRobot {
   MotorControllerGroup motorRight = new MotorControllerGroup(motor_RightRear,motor_RightFront);
   MotorControllerGroup motorLeft = new MotorControllerGroup(motor_LeftRear,motor_LeftFront);
   //DifferentialDrive mainDrive = new DifferentialDrive(motorLeft,motorRight);
+
+  Accelerometer accelerometer = new BuiltInAccelerometer();
+
   @Override
   public void robotInit() { // Initial code. Runs on startup.
     m_robotContainer = new RobotContainer();
 
     // Compressor and Solenoid disabling/closing just to play it safe
-    pcmCompressor.disable();
+    //pcmCompressor.disable();
 
-    //Invert the right motor control group so applying a positive voltage will move forwards on both sides.
-    motorRight.setInverted(true);
+    //Invert the left motor control group so applying a positive voltage will move forwards on both sides.
+    motorLeft.setInverted(true);
   }
 
   /**
@@ -80,7 +85,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -134,7 +139,7 @@ public class Robot extends TimedRobot {
     
     } else if(secondStick.isConnected()){
        */
-    /** XBOX Controller controls */ 
+    /** Play Station Controller controls */ 
     //Movement controls (TANK DRIVE)
     //These if statements are built in to negate joycon dift, where the joycons detect movement while stationary
     if(secondStick.getRawAxis(1)>-0.04&&secondStick.getRawAxis(1)<0.04){motorLeft.set(0);} else {
@@ -146,6 +151,7 @@ public class Robot extends TimedRobot {
     }
     
     //Compressor and solenoid controls
+    /*
     if(secondStick.getRawButtonPressed(1)) {
       System.out.println("Button 3 Pressed. Compressor Enabled.");
       pcmCompressor.enableDigital();
@@ -162,11 +168,20 @@ public class Robot extends TimedRobot {
       System.out.println("Button 6 Pressed. Soneloid Reverse.");
       solenoid1.set(DoubleSolenoid.Value.kReverse);
     }
+    */
   }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+  }
+
+  @Override
+  public void testPeriodic(){
+    System.out.println("X: "+accelerometer.getX());
+    System.out.println("Y: "+accelerometer.getY());
+    System.out.println("Z: "+accelerometer.getZ());
+    System.out.println("");
   }
 }
