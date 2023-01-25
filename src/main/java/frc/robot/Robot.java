@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
+
     // Play Station Controller controls
     // Movement controls (TANK DRIVE)
 
@@ -147,8 +147,6 @@ public class Robot extends TimedRobot {
 
   // Look for button presses
   // if(mainStick.getRawButtonPressed(1)) {}
-
-  }
 
   @Override
   public void testInit() {
