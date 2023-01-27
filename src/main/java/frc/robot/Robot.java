@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +25,7 @@ public class Robot extends TimedRobot {
   // Multipliers to fine tune controls and speedMultipliers
   // TO DO
   double speedMultiplier = 0.8;
+  double clawMultiplier = 1;
 
   // Slew rate limiter filters
   SlewRateLimiter filterLeft = new SlewRateLimiter(0.75);
@@ -35,9 +37,11 @@ public class Robot extends TimedRobot {
   PWMVictorSPX motor_LeftFront = new PWMVictorSPX(2);
   PWMVictorSPX motor_LeftRear = new PWMVictorSPX(3);
 
+  PWMVictorSPX motorClaw = new PWMVictorSPX(4);
   // Motor Group Declarations
   MotorControllerGroup motorRight = new MotorControllerGroup(motor_RightRear, motor_RightFront);
   MotorControllerGroup motorLeft = new MotorControllerGroup(motor_LeftRear, motor_LeftFront);
+  //MotorController motorClaw = new MotorControllerGroup(motor_Claw);
 
   Accelerometer accelerometer = new BuiltInAccelerometer();
 
@@ -142,6 +146,17 @@ public class Robot extends TimedRobot {
       } else {
         motorRight.set(speedMultiplier * filterRight.calculate(mainStick.getRawAxis(3)));
       }
+    }
+
+    //if(mainStick.getRawButtonPressed(5) && mainStick.getRawButtonPressed(6)){
+      //motorClaw.set(0);
+    //} else 
+    if (mainStick.getRawButtonPressed(5)){
+      motorClaw.set(clawMultiplier);
+    } else if (mainStick.getRawButtonPressed(6)){
+      motorClaw.set(-clawMultiplier);
+    } else {
+      motorClaw.set(0);
     }
   }
 
