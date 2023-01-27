@@ -150,16 +150,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    // Cancels all running commands at the start of test mode.
-
+    
   }
 
   @Override
   public void testPeriodic() {
-    /*
-     * System.out.println("X: " + accelerometer.getX());
-     * System.out.println("Y: " + accelerometer.getY());
-     * System.out.println("Z: " + accelerometer.getZ());
-     */
+
   }
 }
