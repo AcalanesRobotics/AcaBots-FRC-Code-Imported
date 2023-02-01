@@ -6,10 +6,10 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,13 +37,21 @@ public class Robot extends TimedRobot {
   PWMVictorSPX motor_LeftFront = new PWMVictorSPX(2);
   PWMVictorSPX motor_LeftRear = new PWMVictorSPX(3);
 
-  PWMVictorSPX motorClaw = new PWMVictorSPX(4);
+  PWMVictorSPX motor_ClawOne = new PWMVictorSPX(4);
+  PWMVictorSPX motor_ClawTwo = new PWMVictorSPX(5);
+
   // Motor Group Declarations
   MotorControllerGroup motorRight = new MotorControllerGroup(motor_RightRear, motor_RightFront);
   MotorControllerGroup motorLeft = new MotorControllerGroup(motor_LeftRear, motor_LeftFront);
-  //MotorController motorClaw = new MotorControllerGroup(motor_Claw);
+
+  MotorControllerGroup motorClaw = new MotorControllerGroup(motor_ClawOne,motor_ClawTwo);
 
   Accelerometer accelerometer = new BuiltInAccelerometer();
+
+  DigitalInput limitSwitch = new DigitalInput(0);
+
+
+
 
   @Override
   public void robotInit() { // Initial code. Runs on startup.
@@ -52,6 +60,7 @@ public class Robot extends TimedRobot {
     // Invert the right motor control group so applying a positive voltage will move
     // forwards on both sides.
     motorRight.setInverted(true);
+    motor_ClawOne.setInverted(true);
 
     CameraServer.startAutomaticCapture();
   }
@@ -121,7 +130,7 @@ public class Robot extends TimedRobot {
 
     // These are here to avoid issues with the acceleration when trying to turn or
     // brake so we can stop more easily.
-    boolean isBraking = (mainStick.getRawAxis(1) < -0.04 && mainStick.getRawAxis(3) < -0.04);
+    boolean isBraking = (mainStick.getRawAxis(1) > 0.04 && mainStick.getRawAxis(3) > 0.04);
     boolean isTurningLeft = (mainStick.getRawAxis(1) < -0.04 && mainStick.getRawAxis(3) > 0.04);
     boolean isTurningRight = (mainStick.getRawAxis(1) > 0.04 && mainStick.getRawAxis(3) < -0.04);
 
@@ -151,12 +160,17 @@ public class Robot extends TimedRobot {
     //if(mainStick.getRawButtonPressed(5) && mainStick.getRawButtonPressed(6)){
       //motorClaw.set(0);
     //} else 
-    if (mainStick.getRawButtonPressed(5)){
+    if (mainStick.getRawButton(5)){
       motorClaw.set(clawMultiplier);
-    } else if (mainStick.getRawButtonPressed(6)){
+    } else if (mainStick.getRawButton(6)){
       motorClaw.set(-clawMultiplier);
     } else {
       motorClaw.set(0);
+    }
+
+
+    if(limitSwitch.get()){
+      System.out.println("Limit switch tripped");
     }
   }
 
