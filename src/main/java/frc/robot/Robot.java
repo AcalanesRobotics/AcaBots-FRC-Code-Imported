@@ -26,6 +26,8 @@ public class Robot extends TimedRobot {
   // TO DO
   double speedMultiplier = 0.8;
   double clawMultiplier = 1;
+  double leftStick = 0;
+  double rightStick = 0;
 
   // Slew rate limiter filters
   SlewRateLimiter filterLeft = new SlewRateLimiter(0.75);
@@ -130,30 +132,42 @@ public class Robot extends TimedRobot {
 
     // These are here to avoid issues with the acceleration when trying to turn or
     // brake so we can stop more easily.
-    boolean isBraking = (mainStick.getRawAxis(1) > 0.04 && mainStick.getRawAxis(3) > 0.04);
-    boolean isTurningLeft = (mainStick.getRawAxis(1) < -0.04 && mainStick.getRawAxis(3) > 0.04);
-    boolean isTurningRight = (mainStick.getRawAxis(1) > 0.04 && mainStick.getRawAxis(3) < -0.04);
+    if(Math.abs(mainStick.getRawAxis(1)) < 0.04){
+      leftStick = 0;
+    }else{
+      leftStick = mainStick.getRawAxis(1);
+    }
+
+    if(Math.abs(mainStick.getRawAxis(3)) < 0.04){
+      rightStick = 0;
+    }else{
+      rightStick = mainStick.getRawAxis(3);
+    }
+
+    boolean isBraking = (leftStick > 0 && rightStick > 0);
+    boolean isTurningLeft = (leftStick < 0 && rightStick > 0);
+    boolean isTurningRight = (leftStick > 0 && rightStick < 0);
 
     // These variables exist to avoid stick drift and to make sure the driver is
     // moving the controls
-    boolean isLeftStationary = (mainStick.getRawAxis(1) > -0.04 && mainStick.getRawAxis(1) < 0.04);
-    boolean isRightStationary = (mainStick.getRawAxis(3) > -0.04 && mainStick.getRawAxis(3) < 0.04);
+    boolean isLeftStationary = (leftStick == 0);
+    boolean isRightStationary = (rightStick == 0);
 
     if (isBraking || isTurningLeft || isTurningRight) {
-      motorLeft.set(speedMultiplier * mainStick.getRawAxis(1));
-      motorRight.set(speedMultiplier * mainStick.getRawAxis(3));
+      motorLeft.set(speedMultiplier * leftStick);
+      motorRight.set(speedMultiplier * rightStick);
     } else {
 
       if (isLeftStationary) {
         motorLeft.set(0);
       } else {
-        motorLeft.set(speedMultiplier * filterLeft.calculate(mainStick.getRawAxis(1)));
+        motorLeft.set(speedMultiplier * filterLeft.calculate(leftStick));
       }
 
       if (isRightStationary) {
         motorRight.set(0);
       } else {
-        motorRight.set(speedMultiplier * filterRight.calculate(mainStick.getRawAxis(3)));
+        motorRight.set(speedMultiplier * filterRight.calculate(rightStick));
       }
     }
 
@@ -161,12 +175,15 @@ public class Robot extends TimedRobot {
       //motorClaw.set(0);
     //} else 
     if (mainStick.getRawButton(5)){
+      //Left button opens
       motorClaw.set(clawMultiplier);
     } else if (mainStick.getRawButton(6)){
+      //Right button closes
       motorClaw.set(-clawMultiplier);
     } else {
       motorClaw.set(0);
     }
+    
 
 
     if(limitSwitch.get()){
