@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   double clawMultiplier = 1;
   double leftStick = 0;
   double rightStick = 0;
+  double elephantSpeed = 1;
 
   // Slew rate limiter filters
   SlewRateLimiter filterLeft = new SlewRateLimiter(0.75);
@@ -41,6 +42,8 @@ public class Robot extends TimedRobot {
 
   PWMVictorSPX motor_ClawOne = new PWMVictorSPX(4);
   PWMVictorSPX motor_ClawTwo = new PWMVictorSPX(5);
+
+  PWMVictorSPX motor_Elephant = new PWMVictorSPX(6);
 
   // Motor Group Declarations
   MotorControllerGroup motorRight = new MotorControllerGroup(motor_RightRear, motor_RightFront);
@@ -181,7 +184,14 @@ public class Robot extends TimedRobot {
       motorClaw.set(0);
     }
     
-
+    
+    if(mainStick.getRawButton(4)){
+      motor_Elephant.set(elephantSpeed);
+    }else if(mainStick.getRawButton(2)){
+      motor_Elephant.set(-elephantSpeed);
+    }else{
+      motor_Elephant.set(0);
+    }
 
     if(limitSwitch.get()){
       System.out.println("Limit switch tripped");
