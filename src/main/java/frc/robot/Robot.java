@@ -130,8 +130,7 @@ public class Robot extends TimedRobot {
     // Play Station Controller controls
     // Movement controls (TANK DRIVE)
 
-    // These are here to avoid issues with the acceleration when trying to turn or
-    // brake so we can stop more easily.
+    // Sets the joystick variable to account for stick drift
     if(Math.abs(mainStick.getRawAxis(1)) < 0.04){
       leftStick = 0;
     }else{
@@ -144,15 +143,15 @@ public class Robot extends TimedRobot {
       rightStick = mainStick.getRawAxis(3);
     }
 
+    // Drive state bools
     boolean isBraking = (leftStick > 0 && rightStick > 0);
     boolean isTurningLeft = (leftStick < 0 && rightStick > 0);
     boolean isTurningRight = (leftStick > 0 && rightStick < 0);
 
-    // These variables exist to avoid stick drift and to make sure the driver is
-    // moving the controls
     boolean isLeftStationary = (leftStick == 0);
     boolean isRightStationary = (rightStick == 0);
 
+    // Moving
     if (isBraking || isTurningLeft || isTurningRight) {
       motorLeft.set(speedMultiplier * leftStick);
       motorRight.set(speedMultiplier * rightStick);
@@ -171,9 +170,7 @@ public class Robot extends TimedRobot {
       }
     }
 
-    //if(mainStick.getRawButtonPressed(5) && mainStick.getRawButtonPressed(6)){
-      //motorClaw.set(0);
-    //} else 
+    // Claw controls
     if (mainStick.getRawButton(5)){
       //Left button opens
       motorClaw.set(clawMultiplier);
