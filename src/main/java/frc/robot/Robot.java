@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -28,11 +29,11 @@ public class Robot extends TimedRobot {
   double clawMultiplier = 1;
   double leftStick = 0;
   double rightStick = 0;
-  double elephantSpeed = 1;
+  double elephantSpeed = 5;
 
   // Slew rate limiter filters
-  SlewRateLimiter filterLeft = new SlewRateLimiter(0.75);
-  SlewRateLimiter filterRight = new SlewRateLimiter(0.75);
+  SlewRateLimiter filterLeft = new SlewRateLimiter(0.85);
+  SlewRateLimiter filterRight = new SlewRateLimiter(0.85);
 
   // Motor Declarations
   PWMVictorSPX motor_RightFront = new PWMVictorSPX(0);
@@ -173,6 +174,7 @@ public class Robot extends TimedRobot {
       }
     }
 
+
     // Claw controls
     if (mainStick.getRawButton(5)){
       //Left button opens
@@ -190,7 +192,7 @@ public class Robot extends TimedRobot {
     }else if(mainStick.getRawButton(2)){
       motor_Elephant.set(-elephantSpeed);
     }else{
-      motor_Elephant.set(0);
+      motor_Elephant.set(0);  
     }
 
     if(limitSwitch.get()){
