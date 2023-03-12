@@ -4,11 +4,20 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Claw extends SubsystemBase {
+
+  PWMVictorSPX motorRight = null;
+  PWMVictorSPX motorLeft = null;
+
   /** Creates a new Claw. */
-  public Claw() {}
+  public Claw() {
+    motorRight = new PWMVictorSPX(Constants.CLAW_MOTOR_RIGHT);
+    motorLeft = new PWMVictorSPX(Constants.CLAW_MOTOR_LEFT);
+  }
 
   @Override
   public void periodic() {

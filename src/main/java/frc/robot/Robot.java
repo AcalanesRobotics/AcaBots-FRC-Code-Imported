@@ -4,14 +4,59 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DriveTank;
 
 public class Robot extends TimedRobot {
   // Declare all vars here
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+
+  // Multipliers to fine tune controls and speedMultipliers
+  // TO DO
+  static double speedMultiplier = 0.8;
+  static double clawMultiplier = 1;
+  static double leftStick = 0;
+  static double rightStick = 0;
+  static double elephantSpeed = 1;
+
+  // Slew rate limiter filters
+  SlewRateLimiter filterLeft = new SlewRateLimiter(0.85);
+  SlewRateLimiter filterRight = new SlewRateLimiter(0.85);
+
+  // Motor Declarations
+  PWMVictorSPX motor_RightFront = new PWMVictorSPX(0);
+  PWMVictorSPX motor_RightRear = new PWMVictorSPX(1);
+  PWMVictorSPX motor_LeftFront = new PWMVictorSPX(2);
+  PWMVictorSPX motor_LeftRear = new PWMVictorSPX(3);
+
+  PWMVictorSPX motor_ClawOne = new PWMVictorSPX(4);
+  PWMVictorSPX motor_ClawTwo = new PWMVictorSPX(5);
+
+  PWMVictorSPX motor_Elephant = new PWMVictorSPX(6);
+
+  // Motor Group Declarations
+  MotorControllerGroup motorRight = new MotorControllerGroup(motor_RightRear, motor_RightFront);
+  MotorControllerGroup motorLeft = new MotorControllerGroup(motor_LeftRear, motor_LeftFront);
+
+  MotorControllerGroup motorClaw = new MotorControllerGroup(motor_ClawOne,motor_ClawTwo);
+
+  Accelerometer accelerometer = new BuiltInAccelerometer();
+
+  DigitalInput limitSwitch = new DigitalInput(0);
+
+
+
 
   @Override
   public void robotInit() { // Initial code. Runs on startup.
