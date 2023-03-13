@@ -6,7 +6,6 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -55,8 +54,6 @@ public class Robot extends TimedRobot {
 
   // Other
   Accelerometer accelerometer = new BuiltInAccelerometer();
-
-  DigitalInput limitSwitch = new DigitalInput(0);
 
   @Override
   public void robotInit() { // Initial code. Runs on startup.
@@ -185,10 +182,6 @@ public class Robot extends TimedRobot {
       motor_Elephant.set(-elephantSpeed);
     }else{
       motor_Elephant.set(0);  
-    }
-
-    if(limitSwitch.get()){
-      System.out.println("Limit switch tripped");
     }
   }
 
