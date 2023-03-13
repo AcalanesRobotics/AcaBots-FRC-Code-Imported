@@ -9,10 +9,11 @@ import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -25,39 +26,37 @@ public class Robot extends TimedRobot {
 
   // Multipliers to fine tune controls and speedMultipliers
   // TO DO
-  double speedMultiplier = 0.8;
-  double clawMultiplier = 1;
-  double leftStick = 0;
-  double rightStick = 0;
-  double elephantSpeed = 5;
+  static final double speedMultiplier = 0.8;
+  static final double clawMultiplier = 1;
+  static final double elephantSpeed = 1;
 
   // Slew rate limiter filters
   SlewRateLimiter filterLeft = new SlewRateLimiter(0.85);
   SlewRateLimiter filterRight = new SlewRateLimiter(0.85);
 
   // Motor Declarations
-  PWMVictorSPX motor_RightFront = new PWMVictorSPX(0);
-  PWMVictorSPX motor_RightRear = new PWMVictorSPX(1);
-  PWMVictorSPX motor_LeftFront = new PWMVictorSPX(2);
-  PWMVictorSPX motor_LeftRear = new PWMVictorSPX(3);
+  PWMSparkMax motor_RightFront = new PWMSparkMax(0);
+  PWMSparkMax motor_RightRear = new PWMSparkMax(1);
+  PWMSparkMax motor_LeftFront = new PWMSparkMax(2);
+  PWMSparkMax motor_LeftRear = new PWMSparkMax(3);
 
   PWMVictorSPX motor_ClawOne = new PWMVictorSPX(4);
   PWMVictorSPX motor_ClawTwo = new PWMVictorSPX(5);
 
-  PWMVictorSPX motor_Elephant = new PWMVictorSPX(6);
+  PWMSparkMax motor_Elephant = new PWMSparkMax(6);
 
   // Motor Group Declarations
   MotorControllerGroup motorRight = new MotorControllerGroup(motor_RightRear, motor_RightFront);
   MotorControllerGroup motorLeft = new MotorControllerGroup(motor_LeftRear, motor_LeftFront);
 
+  DifferentialDrive drive = new DifferentialDrive(motorRight, motorLeft);
+
   MotorControllerGroup motorClaw = new MotorControllerGroup(motor_ClawOne,motor_ClawTwo);
 
+  // Other
   Accelerometer accelerometer = new BuiltInAccelerometer();
 
   DigitalInput limitSwitch = new DigitalInput(0);
-
-
-
 
   @Override
   public void robotInit() { // Initial code. Runs on startup.
@@ -135,45 +134,38 @@ public class Robot extends TimedRobot {
     // Movement controls (TANK DRIVE)
 
     // Sets the joystick variable to account for stick drift
-    if(Math.abs(mainStick.getRawAxis(1)) < 0.04){
-      leftStick = 0;
-    }else{
-      leftStick = mainStick.getRawAxis(1);
-    }
+    
+    double leftStick = mainStick.getRawAxis(1);
+    double rightStick = mainStick.getRawAxis(3);
 
-    if(Math.abs(mainStick.getRawAxis(3)) < 0.04){
-      rightStick = 0;
-    }else{
-      rightStick = mainStick.getRawAxis(3);
-    }
+    // // Drive state bools
+    // boolean isBraking = (leftStick > 0 && rightStick > 0);
+    // boolean isTurningLeft = (leftStick < 0 && rightStick > 0);
+    // boolean isTurningRight = (leftStick > 0 && rightStick < 0);
 
-    // Drive state bools
-    boolean isBraking = (leftStick > 0 && rightStick > 0);
-    boolean isTurningLeft = (leftStick < 0 && rightStick > 0);
-    boolean isTurningRight = (leftStick > 0 && rightStick < 0);
+    // boolean isLeftStationary = (leftStick == 0);
+    // boolean isRightStationary = (rightStick == 0);
 
-    boolean isLeftStationary = (leftStick == 0);
-    boolean isRightStationary = (rightStick == 0);
+    // // Moving
+    // if (isBraking || isTurningLeft || isTurningRight) {
+    //   motorLeft.set(speedMultiplier * leftStick);
+    //   motorRight.set(speedMultiplier * rightStick);
+    // } else {
 
-    // Moving
-    if (isBraking || isTurningLeft || isTurningRight) {
-      motorLeft.set(speedMultiplier * leftStick);
-      motorRight.set(speedMultiplier * rightStick);
-    } else {
+    //   if (isLeftStationary) {
+    //     motorLeft.set(0);
+    //   } else {
+    //     motorLeft.set(speedMultiplier * filterLeft.calculate(leftStick));
+    //   }
 
-      if (isLeftStationary) {
-        motorLeft.set(0);
-      } else {
-        motorLeft.set(speedMultiplier * filterLeft.calculate(leftStick));
-      }
+    //   if (isRightStationary) {
+    //     motorRight.set(0);
+    //   } else {
+    //     motorRight.set(speedMultiplier * filterRight.calculate(rightStick));
+    //   }
+    // }
 
-      if (isRightStationary) {
-        motorRight.set(0);
-      } else {
-        motorRight.set(speedMultiplier * filterRight.calculate(rightStick));
-      }
-    }
-
+    drive.tankDrive(filterLeft.calculate(leftStick), filterRight.calculate(rightStick));
 
     // Claw controls
     if (mainStick.getRawButton(5)){
@@ -199,9 +191,6 @@ public class Robot extends TimedRobot {
       System.out.println("Limit switch tripped");
     }
   }
-
-  // Look for button presses
-  // if(mainStick.getRawButtonPressed(1)) {}
 
   @Override
   public void testInit() {
