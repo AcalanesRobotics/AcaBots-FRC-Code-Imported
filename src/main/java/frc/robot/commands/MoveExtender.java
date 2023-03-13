@@ -16,7 +16,7 @@ public class MoveExtender extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.subExtender);
 
-    speed = direction*Constants.SPEED_EXTENDER;
+    this.speed = direction*Constants.SPEED_EXTENDER;
   }
 
   // Called when the command is initially scheduled.

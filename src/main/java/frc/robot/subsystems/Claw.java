@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -13,10 +14,16 @@ public class Claw extends SubsystemBase {
   PWMVictorSPX motorRight = null;
   PWMVictorSPX motorLeft = null;
 
+  MotorControllerGroup motors = null;
+
   /** Creates a new Claw. */
   public Claw() {
     motorRight = new PWMVictorSPX(Constants.CLAW_MOTOR_RIGHT);
     motorLeft = new PWMVictorSPX(Constants.CLAW_MOTOR_LEFT);
+
+    motorRight.setInverted(true);
+
+    motors = new MotorControllerGroup(motorRight,motorLeft);
   }
 
   @Override
