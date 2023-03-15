@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
+//import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -30,8 +30,8 @@ public class Robot extends TimedRobot {
   static final double elephantSpeed = 1;
 
   // Slew rate limiter filters
-  SlewRateLimiter filterLeft = new SlewRateLimiter(0.85);
-  SlewRateLimiter filterRight = new SlewRateLimiter(0.85);
+  SlewRateLimiter filterLeft = new SlewRateLimiter(2);
+  SlewRateLimiter filterRight = new SlewRateLimiter(2);
 
   // Motor Declarations
   PWMSparkMax motor_RightFront = new PWMSparkMax(0);
@@ -40,15 +40,15 @@ public class Robot extends TimedRobot {
   PWMSparkMax motor_LeftRear = new PWMSparkMax(3);
 
   PWMVictorSPX motor_ClawOne = new PWMVictorSPX(4);
-  PWMVictorSPX motor_ClawTwo = new PWMVictorSPX(5);
+  PWMVictorSPX motor_ClawTwo = new PWMVictorSPX(6);
 
-  PWMSparkMax motor_Elephant = new PWMSparkMax(6);
+  PWMSparkMax motor_Elephant = new PWMSparkMax(5);
 
   // Motor Group Declarations
   MotorControllerGroup motorRight = new MotorControllerGroup(motor_RightRear, motor_RightFront);
   MotorControllerGroup motorLeft = new MotorControllerGroup(motor_LeftRear, motor_LeftFront);
 
-  DifferentialDrive drive = new DifferentialDrive(motorRight, motorLeft);
+  DifferentialDrive drive = null;
 
   MotorControllerGroup motorClaw = new MotorControllerGroup(motor_ClawOne,motor_ClawTwo);
 
@@ -60,11 +60,13 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     // Invert the right motor control group so applying a positive voltage will move
-    // forwards on both sides.
+    // forwards on both sides.P
     motorRight.setInverted(true);
     motor_ClawOne.setInverted(true);
 
-    CameraServer.startAutomaticCapture();
+    drive = new DifferentialDrive(motorLeft, motorRight);
+
+    //CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -168,9 +170,11 @@ public class Robot extends TimedRobot {
     if (mainStick.getRawButton(5)){
       //Left button opens
       motorClaw.set(clawMultiplier);
+      System.out.println("Claw opens. Left pressed.");
     } else if (mainStick.getRawButton(6)){
       //Right button closes
       motorClaw.set(-clawMultiplier);
+      System.out.println("Claw closes. Right pressed.");
     } else {
       motorClaw.set(0);
     }
