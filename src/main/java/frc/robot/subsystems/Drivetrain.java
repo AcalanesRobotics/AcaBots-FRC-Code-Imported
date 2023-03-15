@@ -33,6 +33,8 @@ public class Drivetrain extends SubsystemBase {
     rightMotors = new MotorControllerGroup(motorRightFront, motorRightBack);
     leftMotors = new MotorControllerGroup(motorLeftFront, motorLeftBack);
     leftMotors.setInverted(true);
+
+    drive = new DifferentialDrive(leftMotors, rightMotors);
   }
 
   public void tankDrive(double rightSpeed, double leftSpeed){
