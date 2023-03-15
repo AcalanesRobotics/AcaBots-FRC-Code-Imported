@@ -26,6 +26,10 @@ public class Claw extends SubsystemBase {
     motors = new MotorControllerGroup(motorRight,motorLeft);
   }
 
+  public void move(double speed){
+    motors.set(speed);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

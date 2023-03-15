@@ -15,6 +15,8 @@ public class Constants {
     // Claw motors
     public static final int CLAW_MOTOR_RIGHT = 4;
     public static final int CLAW_MOTOR_LEFT = 5;
+    public static final int CLAW_DIRECTION_OPEN = 1;
+    public static final int CLAW_DIRECTION_CLOSE = -1;
 
     // Controls
     public static final int CONTROLLER_PORT = 0;
