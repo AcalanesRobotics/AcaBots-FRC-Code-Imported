@@ -15,6 +15,7 @@ import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Extender;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,7 +52,7 @@ public class RobotContainer {
     controller.y()
       .whileTrue(new MoveExtender(Constants.EXTENDER_DIRECTION_OUTWARDS));
 
-    controller.a()
+    controller.b()
       .whileTrue(new MoveExtender(Constants.EXTENDER_DIRECTION_INWARDS));
 
     controller.leftBumper()
@@ -59,6 +60,10 @@ public class RobotContainer {
 
     controller.rightBumper()
       .whileTrue(new MoveClaw(Constants.CLAW_DIRECTION_CLOSE));
+
+    controller.rightTrigger()
+      .onTrue(new InstantCommand(() -> m_drivetrain.changeSlowMode()))
+      .onFalse(new InstantCommand(() -> m_drivetrain.changeSlowMode()));
   }
 
   /**

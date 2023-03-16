@@ -29,7 +29,7 @@ public class DriveTank extends CommandBase {
     double rightSpeed = RobotContainer.controller.getRawAxis(Constants.CONTROLLER_RIGHT_DRIVE_AXIS);
     double leftSpeed = RobotContainer.controller.getRawAxis(Constants.CONTROLLER_LEFT_DRIVE_AXIS);
 
-    RobotContainer.m_drivetrain.tankDrive(rightSlewRateLimiter.calculate(rightSpeed),leftSlewRateLimiter.calculate(leftSpeed));
+    RobotContainer.m_drivetrain.tankDrive(-rightSlewRateLimiter.calculate(rightSpeed),-leftSlewRateLimiter.calculate(leftSpeed));
   }
 
   // Called once the command ends or is interrupted.

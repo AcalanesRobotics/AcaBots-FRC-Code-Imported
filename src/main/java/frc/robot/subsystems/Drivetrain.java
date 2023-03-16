@@ -22,6 +22,8 @@ public class Drivetrain extends SubsystemBase {
 
   DifferentialDrive drive = null;
 
+  boolean slowMode = false;
+
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     // Sets drive motors
@@ -38,7 +40,15 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void tankDrive(double rightSpeed, double leftSpeed){
-    drive.tankDrive(rightSpeed, leftSpeed);
+    if(!slowMode){
+      drive.tankDrive(rightSpeed*Constants.SPEED_DRIVE, leftSpeed*Constants.SPEED_DRIVE);
+    }else if(slowMode){
+      drive.tankDrive(rightSpeed*Constants.SPEED_SLOW_DRIVE, leftSpeed*Constants.SPEED_SLOW_DRIVE);
+    }
+  }
+
+  public void changeSlowMode(){
+    slowMode = !slowMode;
   }
 
   @Override
