@@ -56,10 +56,10 @@ public class RobotContainer {
     controller.b()
       .whileTrue(new MoveExtender(Constants.EXTENDER_DIRECTION_INWARDS));
 
-    controller.leftBumper()
+    controller.rightBumper()
       .whileTrue(new MoveClaw(Constants.CLAW_DIRECTION_OPEN));
 
-    controller.rightBumper()
+    controller.leftBumper()
       .whileTrue(new MoveClaw(Constants.CLAW_DIRECTION_CLOSE));
 
     // controller.rightTrigger()

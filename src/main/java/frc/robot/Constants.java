@@ -15,8 +15,8 @@ public class Constants {
     // Claw motors
     public static final int CLAW_MOTOR_RIGHT = 4;
     public static final int CLAW_MOTOR_LEFT = 6;
-    public static final int CLAW_DIRECTION_OPEN = 1;
-    public static final int CLAW_DIRECTION_CLOSE = -1;
+    public static final int CLAW_DIRECTION_OPEN = -1;
+    public static final int CLAW_DIRECTION_CLOSE = 1;
 
     // Controls
     public static final int CONTROLLER_PORT = 0;
@@ -30,10 +30,10 @@ public class Constants {
     // Speeds
     public static final double SPEED_EXTENDER = .9;
     public static final double SPEED_CLAW = 0.7;
-    public static final double SPEED_DRIVE = 0.8;
-    public static final double SPEED_SLOW_DRIVE = 0.3;
+    public static final double SPEED_DRIVE = 0.9;
+    public static final double SPEED_SLOW_DRIVE = 0.7;
 
     // Autonomous
-    public static final double AUTONOMOUS_EXTENDER_TIME = 0.3;
-    public static final double AUTONOMOUS_CLAW_TIME = 0.3;
+    public static final double AUTONOMOUS_EXTENDER_TIME = 1.8;
+    public static final double AUTONOMOUS_CLAW_TIME = 0.2;
 }
