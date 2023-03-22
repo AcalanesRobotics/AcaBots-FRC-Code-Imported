@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.DriveTank;
 import frc.robot.commands.MoveClaw;
 import frc.robot.commands.MoveExtender;
@@ -75,6 +76,6 @@ public class RobotContainer {
 
     // An example command will be run in autonomous
 
-    return null;
+    return new AutonomousCommand();
   }
 }

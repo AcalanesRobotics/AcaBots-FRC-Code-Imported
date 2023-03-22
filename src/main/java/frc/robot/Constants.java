@@ -32,4 +32,8 @@ public class Constants {
     public static final double SPEED_CLAW = 0.7;
     public static final double SPEED_DRIVE = 0.8;
     public static final double SPEED_SLOW_DRIVE = 0.3;
+
+    // Autonomous
+    public static final double AUTONOMOUS_EXTENDER_TIME = 0.3;
+    public static final double AUTONOMOUS_CLAW_TIME = 0.3;
 }
