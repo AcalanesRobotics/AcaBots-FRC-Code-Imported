@@ -40,16 +40,21 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void tankDrive(double rightSpeed, double leftSpeed){
-    if(!slowMode){
-      drive.tankDrive(rightSpeed*Constants.SPEED_DRIVE, leftSpeed*Constants.SPEED_DRIVE);
-    }else if(slowMode){
+    if(slowMode){
       drive.tankDrive(rightSpeed*Constants.SPEED_SLOW_DRIVE, leftSpeed*Constants.SPEED_SLOW_DRIVE);
+    }else{
+      drive.tankDrive(rightSpeed*Constants.SPEED_DRIVE, leftSpeed*Constants.SPEED_DRIVE);
     }
   }
 
   public void changeSlowMode(){
     slowMode = !slowMode;
+    System.out.println("slow mode:" + slowMode);
   }
+
+  // public void setMaxOutput(double ){
+      
+  // }
 
   @Override
   public void periodic() {

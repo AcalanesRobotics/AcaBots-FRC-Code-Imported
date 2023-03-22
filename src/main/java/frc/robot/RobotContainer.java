@@ -62,7 +62,11 @@ public class RobotContainer {
     controller.rightBumper()
       .whileTrue(new MoveClaw(Constants.CLAW_DIRECTION_CLOSE));
 
-    controller.rightTrigger()
+    // controller.rightTrigger()
+    //   .onTrue(new InstantCommand(() -> m_drivetrain.changeSlowMode()))
+    //   .onFalse(new InstantCommand(() -> m_drivetrain.changeSlowMode()));
+
+    controller.button(7)
       .onTrue(new InstantCommand(() -> m_drivetrain.changeSlowMode()))
       .onFalse(new InstantCommand(() -> m_drivetrain.changeSlowMode()));
   }
