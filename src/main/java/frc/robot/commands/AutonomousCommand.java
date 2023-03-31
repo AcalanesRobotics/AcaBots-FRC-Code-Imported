@@ -14,9 +14,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
   /** Creates a new AutonomousCommand. */
   public AutonomousCommand() {
     // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new MoveExtender(Constants.EXTENDER_DIRECTION_OUTWARDS).withTimeout(Constants.AUTONOMOUS_EXTENDER_TIME)
-      .andThen(new MoveClaw(Constants.CLAW_DIRECTION_OPEN).withTimeout(Constants.AUTONOMOUS_CLAW_TIME))
-      .andThen(new MoveExtender(Constants.EXTENDER_DIRECTION_INWARDS).withTimeout(Constants.AUTONOMOUS_EXTENDER_TIME)));
+    // addCommands(new FooCommand(), new BarCommand());-+
+    addCommands(new MoveExtender(Constants.EXTENDER_DIRECTION_OUTWARDS).withTimeout(Constants.AUTONOMOUS_EXTENDER_TIME));
   }
 }

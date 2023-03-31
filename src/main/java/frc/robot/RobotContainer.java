@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.DriveStraight;
 import frc.robot.commands.DriveTank;
 import frc.robot.commands.MoveClaw;
 import frc.robot.commands.MoveExtender;
@@ -62,13 +63,15 @@ public class RobotContainer {
     controller.leftBumper()
       .whileTrue(new MoveClaw(Constants.CLAW_DIRECTION_CLOSE));
 
-    // controller.rightTrigger()
-    //   .onTrue(new InstantCommand(() -> m_drivetrain.changeSlowMode()))
-    //   .onFalse(new InstantCommand(() -> m_drivetrain.changeSlowMode()));
-
     controller.button(7)
       .onTrue(new InstantCommand(() -> m_drivetrain.changeSlowMode()))
       .onFalse(new InstantCommand(() -> m_drivetrain.changeSlowMode()));
+
+    controller.povUp()
+      .whileTrue(new DriveStraight(-1));
+
+      controller.povDown()
+      .whileTrue(new DriveStraight(1));
   }
 
   /**
@@ -80,6 +83,6 @@ public class RobotContainer {
 
     // An example command will be run in autonomous
 
-    return new AutonomousCommand();
+    return null;
   }
 }
